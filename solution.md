@@ -11,19 +11,19 @@ The resulting output is the timeline of activities tagged with confidence values
 
 ## Methodology
 
-1. Video-Based Activity Estimation
+### Video-Based Activity Estimation
 
 The YOLOv8n is a pretrained model that is applied for dog localization in the video feed. The localization is not done based on full-motion detection but only in the detected dog area.
 To balance accuracy and computational efficiency, YOLO inference is executed every 10 frames.
 
 
-2. Persistent ROI Tracking
+### Persistent ROI Tracking
 
 Object detection algorithms can sometimes fail at detections because of pose variations, blurring effects, or partial occlusions. In order to maintain object continuity, the latest bounding box is used for 30 frames(1 second).
 This allows activity estimation to remain focused on the dog even during temporary detection failures.
 
 
-3. Motion Analysis
+### Motion Analysis
 
 Frame-to-frame motion is calculated using grayscale difference analysis.
 
@@ -34,12 +34,12 @@ Two operating modes are used:
 This hybrid approach improves robustness while ensuring uninterrupted activity estimation.
 
 
-4. Confidence Normalization
+### Confidence Normalization
 
 The ROI-based motion and the full-frame motion have naturally different value ranges. In order to ensure that neither becomes dominant over the other, the two are normalized independently prior to converting them into video confidence values.
 
 
-5. IMU Activity Estimation
+### IMU Activity Estimation
 
 The IMU branch combines both:
 - Accelerometer magnitude
@@ -48,7 +48,7 @@ The IMU branch combines both:
 The energy of a rolling window in the merged signal is determined and normalized to obtain the IMU activity confidence score.
 
 
-6. Sensor Fusion
+### Sensor Fusion
 
 The final activity confidence is obtained through weighted fusion:
 - Final Confidence = 0.7 × Video Confidence + 0.3 × IMU Confidence
